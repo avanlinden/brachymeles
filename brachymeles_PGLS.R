@@ -385,4 +385,29 @@ colnames(tailCMat) <- c("SVL", "tailcirc")
 
 phylomorphospace(theTree, tailCMat, label = "horizontal", fsize = 0.7)
 
+### ANOVA tables with summary statistics =============
 
+#use anova(pgls model) to get summary statistics requested by reviewer (sum of squares, mean square error, F, P)
+
+anova(head)
+anova(mid)
+anova(tail)
+anova(headC)
+anova(midC)
+anova(tailC)
+
+### Likelihood values for ML estimates of lambda =======
+
+#for each PGLS model, check what the ML estimate of lambda is (i.e., here it's 1):
+summary(head)$param.CI$lambda$opt
+
+#use pgls.profile to extract log likelihood values for the ML estimate of lambda for each model (so for the 'head' model, the ML lambda estimate is 1 and the logLikelihood of that estimate is 6.187)
+pgls.profile(head, which = "lambda")$logLik[pgls.profile(head, which = "lambda")$x == 1]
+
+#can do this and report loglik for the ML estimate for each model, or it might be easier to visualize the likelihood profile of the lambda parameter optimization process
+
+#this shows a plot of the likelihood of all potential lambda values between 0 and 1; it's highest at 1 but it should show a nice 'peak' -- it doesn't because we have so few specimens. The dotter red lines are the 95% confidence interval bounds and the solid red line is the ML estimate
+plot(pgls.profile(head, which = "lambda")) 
+
+#can do this for all the models
+plot(pgls.profile(mid, which = "lambda"))
